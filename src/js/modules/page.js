@@ -536,7 +536,7 @@ Page.prototype._getRemotePage = function(){
 
 		self.table.modules.ajax.setParams(pageParams);
 
-		self.table.modules.ajax.sendRequest(this.progressiveLoad)
+		self.table.modules.ajax.sendRequest(this.progressiveLoad && self.page !== 1)
 		.then((data)=>{
 			self._parseRemoteData(data);
 			resolve();

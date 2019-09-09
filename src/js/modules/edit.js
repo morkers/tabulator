@@ -1225,6 +1225,158 @@ Edit.prototype.editors = {
 
 		return input;
 	},
+	remoteAutocomplete: function(cell, onRendered, success, cancel, editorParams) {
+		var self = this,
+		cellEl = cell.getElement(),
+		initialValue = cell.getValue(),
+		input = document.createElement("input"),
+		listEl = document.createElement("div"),
+		allItems = [],
+		value = '',
+		currentItem = {},
+		blurable = true;
+
+		function fillList(){
+
+			while(listEl.firstChild) listEl.removeChild(listEl.firstChild);
+
+			allItems.forEach(function(item){
+				let el = document.createElement("div");
+				el.classList.add("tabulator-edit-select-list-item");
+				el.tabIndex = 0;
+				el.innerHTML = item;
+
+				el.addEventListener("mousedown", function(){
+					setCurrentItem(item);
+					chooseItem();
+				});
+			
+				listEl.appendChild(el);
+			});
+		}
+
+
+		function setCurrentItem(item){
+			input.value = item;
+		}
+
+		function chooseItem(){
+			hideList();
+
+			if (input.value == editorParams.empty) {
+				success('');
+			} else {
+				success(input.value);
+			}
+		}
+
+		function cancelItem(){
+			hideList();
+			cancel();
+		}
+
+		function showList(){
+			if(!listEl.parentNode){
+				while(listEl.firstChild) listEl.removeChild(listEl.firstChild);
+
+				fillList();
+
+				var offset = Tabulator.prototype.helpers.elOffset(cellEl);
+
+				listEl.style.minWidth = cellEl.offsetWidth + "px";
+
+				listEl.style.top = (offset.top + cellEl.offsetHeight) + "px";
+				listEl.style.left = offset.left + "px";
+				document.body.appendChild(listEl);
+		
+			}
+		}
+
+		function hideList(){
+			if(listEl.parentNode){
+				listEl.parentNode.removeChild(listEl);
+			}
+		}
+
+		//style input
+		input.setAttribute("type", "search");
+
+		input.style.padding = "4px";
+		input.style.width = "100%";
+		input.style.boxSizing = "border-box";
+
+		input.addEventListener("blur", function(e){
+			setTimeout(hideList, 500);
+		});
+
+		input.addEventListener("focus", function(e){
+			console.log('Focus');
+			if (!input.value) {
+				fetch(editorParams.url)
+				.then(response => {
+					response.json().then(data => {
+						allItems = data;
+						showList();
+					});	
+				});
+			} else {
+				showList();	
+			}
+		});
+
+		function debounce(func, wait, immediate) {
+			var timeout;
+			return function() {
+				var context = this, args = arguments;
+				var later = function() {
+					timeout = null;
+					if (!immediate) func.apply(context, args);
+				};
+				var callNow = immediate && !timeout;
+				clearTimeout(timeout);
+				timeout = setTimeout(later, wait);
+				if (callNow) func.apply(context, args);
+			};
+		};
+
+		const getValues = debounce(function () {
+			console.log('keyup');
+
+			let url = editorParams.url;
+
+			if (input.value) {
+				url = url  + `&q=${input.value}`;
+			}
+
+			if (input.value == '') {
+				success('');
+			}
+			
+			while(listEl.firstChild) listEl.removeChild(listEl.firstChild);
+			fetch(url)
+				.then(response => {
+					response.json().then(data => {
+						allItems = data;
+						fillList();
+						// showList();
+					});	
+				});
+		}, 300);
+
+		input.addEventListener('keyup', getValues);
+		input.addEventListener("search", getValues);
+
+		//style list element
+		listEl = document.createElement("div");
+		listEl.classList.add("tabulator-edit-select-list");
+
+		onRendered(function(){
+			input.style.height = "100%";
+			input.focus();
+		});
+
+		return input;
+	},
 
 	//start rating
 	star:function(cell, onRendered, success, cancel, editorParams){

@@ -537,7 +537,7 @@ Page.prototype._getRemotePage = function () {
 
 		self.table.modules.ajax.setParams(pageParams);
 
-		self.table.modules.ajax.sendRequest(_this7.progressiveLoad).then(function (data) {
+		self.table.modules.ajax.sendRequest(_this7.progressiveLoad && self.page !== 1).then(function (data) {
 			self._parseRemoteData(data);
 			resolve();
 		}).catch(function (e) {
@@ -622,6 +622,8 @@ Page.prototype.paginationDataSentNames = {
 	"sorters": "sorters",
 	// "sort_dir":"sort_dir",
 	"filters": "filters"
+	// "filter_value":"filter_value",
+	// "filter_type":"filter_type",
 };
 
 //set the property names for pagination responses

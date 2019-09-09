@@ -46,7 +46,7 @@ $footerActiveColor:#d00 !default; //footer bottom active text color
 	text-align: left;
 	width: 100%;
 
-	margin: $margin;
+	margin: 0;
 	border: $border;
 	box-shadow: $boxShadow;
 	border-radius: $borderRadius;
@@ -531,46 +531,46 @@ $footerActiveColor:#d00 !default; //footer bottom active text color
 	}
 
 	//holding div that contains loader and covers tabulator element to prevent interaction
-	.tabulator-loader{
-		position:absolute;
-		display: flex;
-		align-items:center;
+	// .tabulator-loader{
+	// 	position:absolute;
+	// 	display: flex;
+	// 	align-items:center;
 
-		top:0;
-		left:0;
-		z-index:100;
+	// 	top:0;
+	// 	left:0;
+	// 	z-index:100;
 
-		height:100%;
-		width:100%;
-		background:rgba(0,0,0,.4);
-		text-align:center;
+	// 	height:100%;
+	// 	width:100%;
+	// 	background:rgba(0,0,0,.05);
+	// 	text-align:center;
 
-		//loading message element
-		.tabulator-loader-msg{
-			display:inline-block;
+	// 	//loading message element
+	// 	.tabulator-loader-msg{
+	// 		display:inline-block;
 
-			margin:0 auto;
-			padding:10px 20px;
+	// 		margin:0 auto;
+	// 		padding:10px 20px;
 
-			border-radius:10px;
+	// 		border-radius:10px;
 
-			background:#fff;
-			font-weight:bold;
-			font-size:16px;
+	// 		background:#fff;
+	// 		font-weight:bold;
+	// 		font-size:16px;
 
-			//loading message
-			&.tabulator-loading{
-				border:4px solid #333;
-				color:#000;
-			}
+	// 		//loading message
+	// 		&.tabulator-loading{
+	// 			border:4px solid #333;
+	// 			color:#000;
+	// 		}
 
-			//error message
-			&.tabulator-error{
-				border:4px solid #D00;
-				color:#590000;
-			}
-		}
-	}
+	// 		//error message
+	// 		&.tabulator-error{
+	// 			border:4px solid #D00;
+	// 			color:#590000;
+	// 		}
+	// 	}
+	// }
 
 
 	//Semantic-ui theming classes
@@ -681,7 +681,7 @@ $footerActiveColor:#d00 !default; //footer bottom active text color
 			.tabulator-table{
 				.tabulator-row{
 					&:nth-child(even){
-						background-color: $basicTableStripedBackground !important;
+						background-color: $basicTableStripedBackground;
 					}
 				}
 			}
@@ -950,7 +950,7 @@ $footerActiveColor:#d00 !default; //footer bottom active text color
 	}
 
 	&.tabulator-selected{
-		background-color:$rowSelectedBackground;
+		background-color:$rowSelectedBackground !important;
 	}
 
 	&.tabulator-selected:hover{
