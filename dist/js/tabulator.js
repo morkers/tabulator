@@ -11808,6 +11808,16 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 			    currentItem = {},
 			    blurable = true;
 
+			if (editorParams.cookieKey) {
+				var cookie = document.cookie.split('; ').filter(function (i) {
+					return !i.indexOf(editorParams.cookieKey + '=');
+				})[0];
+				if (cookie) {
+					var val = cookie.split('=')[1];
+					input.value = val == '' ? editorParams.empty : val;
+					success(val);
+				}
+			}
 			function fillList() {
 
 				while (listEl.firstChild) {
@@ -11833,11 +11843,16 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 			function chooseItem() {
 				hideList();
-
+				var val = void 0;
 				if (input.value == editorParams.empty) {
 					success('');
+					val = '';
 				} else {
 					success(input.value);
+					val = input.value;
+				}
+				if (editorParams.cookieKey) {
+					document.cookie = editorParams.cookieKey + '=' + val;
 				}
 			}
 
@@ -11919,6 +11934,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 				}
 
 				if (input.value == '') {
+					if (editorParams.cookieKey) {
+						document.cookie = editorParams.cookieKey + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT';
+					}
 					success('');
 				}
 
@@ -12278,6 +12296,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 	};
 
 	Tabulator.prototype.registerModule("edit", Edit);
+
 	var Filter = function Filter(table) {
 
 		this.table = table; //hold Tabulator object

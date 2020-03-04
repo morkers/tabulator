@@ -1240,6 +1240,16 @@ Edit.prototype.editors = {
 		    currentItem = {},
 		    blurable = true;
 
+		if (editorParams.cookieKey) {
+			var cookie = document.cookie.split('; ').filter(function (i) {
+				return !i.indexOf(editorParams.cookieKey + '=');
+			})[0];
+			if (cookie) {
+				var val = cookie.split('=')[1];
+				input.value = val == '' ? editorParams.empty : val;
+				success(val);
+			}
+		}
 		function fillList() {
 
 			while (listEl.firstChild) {
@@ -1265,11 +1275,16 @@ Edit.prototype.editors = {
 
 		function chooseItem() {
 			hideList();
-
+			var val = void 0;
 			if (input.value == editorParams.empty) {
 				success('');
+				val = '';
 			} else {
 				success(input.value);
+				val = input.value;
+			}
+			if (editorParams.cookieKey) {
+				document.cookie = editorParams.cookieKey + '=' + val;
 			}
 		}
 
@@ -1351,6 +1366,9 @@ Edit.prototype.editors = {
 			}
 
 			if (input.value == '') {
+				if (editorParams.cookieKey) {
+					document.cookie = editorParams.cookieKey + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT';
+				}
 				success('');
 			}
 
