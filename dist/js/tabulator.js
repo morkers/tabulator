@@ -11843,6 +11843,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 			function chooseItem() {
 				hideList();
+				window.calcCache = new Object();
 				var val = void 0;
 				if (input.value == editorParams.empty) {
 					success('');
@@ -11895,7 +11896,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 			});
 
 			input.addEventListener("focus", function (e) {
-				console.log('Focus');
 				if (!input.value) {
 					fetch(editorParams.url).then(function (response) {
 						response.json().then(function (data) {
@@ -11934,6 +11934,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 				}
 
 				if (input.value == '') {
+					window.calcCache = new Object();
 					if (editorParams.cookieKey) {
 						document.cookie = editorParams.cookieKey + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT';
 					}

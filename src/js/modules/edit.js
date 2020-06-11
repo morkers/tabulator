@@ -1270,6 +1270,7 @@ Edit.prototype.editors = {
 
 		function chooseItem(){
 			hideList();
+			window.calcCache = new Object();
 			let val;
 			if (input.value == editorParams.empty) {
 				success('');
@@ -1324,7 +1325,6 @@ Edit.prototype.editors = {
 		});
 
 		input.addEventListener("focus", function(e){
-			console.log('Focus');
 			if (!input.value) {
 				fetch(editorParams.url)
 				.then(response => {
@@ -1363,6 +1363,7 @@ Edit.prototype.editors = {
 			}
 
 			if (input.value == '') {
+				window.calcCache = new Object();
 				if (editorParams.cookieKey) {
 					document.cookie = editorParams.cookieKey + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT';
 				}
